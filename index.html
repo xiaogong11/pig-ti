@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#fbf7f4" />
+<title>你是哪块猪肉？ | PIG-TI v5.18</title>
+<meta name="description" content="10 道题鉴定你的无畏猪格。东彦猪格研究所™ PIG-TI v5.18 —— 本测试与心理学毫无关系。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐷</text></svg>" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== 背景装饰层（原创，不使用任何官方素材） ===== -->
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-a"></div>
+  <div class="bg-glow bg-glow-b"></div>
+  <div class="bg-scanlines"></div>
+</div>
+<div class="hud-corner hud-tl" aria-hidden="true"></div>
+<div class="hud-corner hud-tr" aria-hidden="true"></div>
+<div class="hud-corner hud-bl" aria-hidden="true"></div>
+<div class="hud-corner hud-br" aria-hidden="true"></div>
+
+<main id="app">
+
+  <!-- ================= 首页 ================= -->
+  <section id="screen-home" class="screen is-active">
+    <div class="wrap">
+      <div class="home-top">
+        <button id="codex-btn" class="codex-btn" type="button" aria-haspopup="dialog">
+          <span id="codex-count">🏆 彩蛋 0 / 10</span>
+        </button>
+      </div>
+
+      <header class="home-head">
+        <p class="hud-tag">PIG-TI v5.18 · 猪肉鉴定进行中</p>
+        <h1 class="home-title glitch" data-text="你是哪块猪肉？">你是哪块猪肉？</h1>
+        <p class="home-sub">10 道题鉴定你的无畏猪格</p>
+        <p class="home-note">本测试与心理学毫无关系，<br />与您的游戏理解可能也没什么关系。</p>
+      </header>
+
+      <div class="home-cards" id="home-cards" aria-hidden="true"></div>
+
+      <div class="home-actions">
+        <button id="btn-start" class="btn btn-primary btn-lg btn-block" type="button">开始验猪</button>
+
+        <div id="resume-box" class="resume-box hidden">
+          <p class="resume-title">检测到一块尚未鉴定完成的猪肉。</p>
+          <p class="resume-sub" id="resume-sub">上次停在第 1 题</p>
+          <div class="resume-actions">
+            <button id="btn-resume" class="btn btn-primary" type="button">继续验猪</button>
+            <button id="btn-restart" class="btn btn-ghost" type="button">重新开始</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="random-tip" id="random-tip">正在腌制猪肉……</p>
+
+      <footer class="site-foot">
+        <span>东彦猪格研究所™</span><i class="dot"></i><span>PIG-TI v5.18</span>
+      </footer>
+    </div>
+  </section>
+
+  <!-- ================= 答题页 ================= -->
+  <section id="screen-quiz" class="screen">
+    <div class="wrap wrap-quiz">
+      <div class="quiz-head">
+        <div class="quiz-progress-row">
+          <span id="quiz-progress-label">猪肉鉴定进度 0%</span>
+          <span id="quiz-progress-count" class="mono">1 / 10</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="quiz-progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="quiz-body">
+        <div class="q-card" id="q-card">
+          <div class="q-meta">
+            <span class="q-index mono" id="q-index">Q1</span>
+            <span class="hud-tag hud-tag-sm">鉴定中</span>
+          </div>
+          <h2 class="q-text" id="q-text"></h2>
+          <p class="q-hint hidden" id="q-hint"></p>
+          <div class="q-options" id="q-options" role="group" aria-label="选项"></div>
+        </div>
+      </div>
+
+      <div class="quiz-foot">
+        <button id="btn-quit" class="btn btn-text btn-sm" type="button">← 放弃鉴定，回首页</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 分析页 ================= -->
+  <section id="screen-analysis" class="screen">
+    <div class="wrap wrap-center">
+      <div class="analysis-box">
+        <div class="scan-frame" aria-hidden="true">
+          <span class="scan-corner sc-tl"></span>
+          <span class="scan-corner sc-tr"></span>
+          <span class="scan-corner sc-bl"></span>
+          <span class="scan-corner sc-br"></span>
+          <div class="scan-line"></div>
+          <div class="crosshair">
+            <span class="ch-line ch-v"></span>
+            <span class="ch-line ch-h"></span>
+            <span class="ch-ring"></span>
+          </div>
+        </div>
+
+        <p class="hud-tag">猪肉分析</p>
+        <div class="analysis-stream" id="analysis-stream" aria-live="polite"></div>
+        <div class="analysis-bar"><div class="analysis-bar-fill" id="analysis-bar-fill"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 结果页 ================= -->
+  <section id="screen-result" class="screen">
+    <div class="wrap" id="result-inner">
+      <p class="hud-tag">鉴定报告 · PIG-TI v5.18</p>
+      <p class="result-lead">你的无畏猪格是</p>
+      <h1 class="result-name" id="result-name">赛博指挥猪</h1>
+      <p class="result-meme" id="result-meme"></p>
+      <p class="result-mbti"><span id="result-mbti">ENTP</span></p>
+
+      <div class="result-photo" id="result-photo" role="button" tabindex="0" aria-label="查看完整图片">
+        <img id="result-img" src="" alt="" />
+        <span class="photo-zoom">点击查看完整图片</span>
+      </div>
+
+      <p class="result-tagline" id="result-tagline"></p>
+      <div class="result-desc" id="result-desc"></div>
+
+      <div class="stats" id="stats"></div>
+
+      <p class="result-comment" id="result-comment"></p>
+      <p class="mvp-badge hidden" id="mvp-badge">🎬 本场 MVP：节目效果</p>
+
+      <div class="new-achs hidden" id="new-achs">
+        <p class="new-achs-title">本次解锁新猪肉成就！</p>
+        <div class="new-achs-list" id="new-achs-list"></div>
+      </div>
+
+      <div class="result-actions">
+        <button id="btn-copy" class="btn btn-primary btn-block" type="button">复制结果</button>
+        <div class="result-actions-row">
+          <button id="btn-again" class="btn btn-ghost" type="button">再验一次</button>
+          <button id="btn-codex2" class="btn btn-ghost" type="button">猪肉图鉴</button>
+          <button id="btn-home2" class="btn btn-text" type="button">回首页</button>
+        </div>
+      </div>
+
+      <footer class="site-foot">
+        <span>东彦猪格研究所™</span><i class="dot"></i><span>PIG-TI v5.18</span>
+      </footer>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= 彩蛋播放层 ================= -->
+<div id="egg-overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="彩蛋">
+  <div class="egg-panel" id="egg-panel">
+    <div class="egg-head">
+      <span class="hud-tag hud-tag-sm" id="egg-tag">EASTER EGG</span>
+      <button id="egg-skip" class="btn btn-text btn-sm" type="button">跳过 »</button>
+    </div>
+    <div class="egg-stream mono" id="egg-stream"></div>
+  </div>
+</div>
+
+<!-- ================= 猪肉图鉴 ================= -->
+<div id="codex-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="codex-title">
+  <div class="modal-panel">
+    <button class="modal-close" id="codex-close" type="button" aria-label="关闭图鉴">✕</button>
+    <h2 class="modal-title" id="codex-title">猪肉图鉴</h2>
+    <p class="modal-sub">你究竟还能解锁多少离谱东西？</p>
+    <p class="codex-line mono" id="codex-line"></p>
+    <div class="codex-list" id="codex-list"></div>
+    <button class="btn btn-ghost btn-block" id="codex-close2" type="button">关闭</button>
+  </div>
+</div>
+
+<!-- ================= 图片全屏预览 ================= -->
+<div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true" aria-label="图片预览">
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="关闭图片预览">✕</button>
+  <img id="lightbox-img" src="" alt="" />
+  <p class="lightbox-cap" id="lightbox-cap"></p>
+</div>
+
+<!-- ================= Toast ================= -->
+<div id="toast-wrap" class="toast-wrap" aria-live="polite" aria-atomic="true"></div>
+
+<script src="data.js"></script>
+<script src="achievements.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

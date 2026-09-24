@@ -1,0 +1,6 @@
+# 工作区内部数据与本地杂项，不发布
+.workbuddy/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
